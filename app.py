@@ -6,10 +6,17 @@ Run from the project root:  streamlit run app.py
 """
 
 from datetime import date, timedelta
+from pathlib import Path
 
+import altair as alt
+import pandas as pd
 import streamlit as st
 
 from src.advisor import MODEL_PATH, advise, load_model
+
+HISTORY_PATH = Path(__file__).resolve().parent / "data" / "cafeteria_days.csv"
+# Status colours for the risk tiers (always shown with a text legend, never colour alone).
+RISK_COLOURS = {"low": "#0ca30c", "medium": "#fab219", "high": "#d03b3b"}
 
 st.set_page_config(page_title="Village 2 Waste Advisor", page_icon="🍱")
 
@@ -32,6 +39,12 @@ def get_model(modified_time):
 
 
 model = get_model(MODEL_PATH.stat().st_mtime)
+
+
+@st.cache_data
+def get_history(modified_time):
+    # Reloads after `python src/simulate.py`, like the model above.
+    return pd.read_csv(HISTORY_PATH, parse_dates=["date"])
 
 # --- Inputs ----------------------------------------------------------------------
 col1, col2 = st.columns(2)
@@ -95,6 +108,61 @@ else:
 
 # --- Energy tip ------------------------------------------------------------------
 st.write(f"⚡ **Off-peak energy tip:** {result['tip']}")
+
+# --- Past days -----------------------------------------------------------------------
+st.divider()
+st.subheader("Past days (simulated)")
+
+history = get_history(HISTORY_PATH.stat().st_mtime).copy()
+history["similar"] = (history["calendar"] == calendar) & (history["weather"] == weather)
+similar = history[history["similar"]]
+
+label = f"{calendar} days with {weather} weather"
+if len(similar):
+    st.write(
+        f"**{len(similar)}** past {label}: on average **{similar['footfall'].mean():.0f} diners**, "
+        f"and **{(similar['waste_risk'] == 'high').mean():.0%}** were high waste risk. "
+        "They are highlighted below."
+    )
+else:
+    st.write(f"No past {label} in the simulated history.")
+
+base = alt.Chart(history).encode(
+    x=alt.X("date:T", title=None, axis=alt.Axis(format="%b", grid=False)),
+    y=alt.Y("footfall:Q", title="Lunch diners", scale=alt.Scale(domainMin=0)),
+)
+line = base.mark_line(strokeWidth=1.5, color="#b4b2a9")
+points = base.mark_circle(size=60, stroke="#ffffff", strokeWidth=1).encode(
+    color=alt.Color(
+        "waste_risk:N", title="Waste risk",
+        scale=alt.Scale(domain=list(RISK_COLOURS), range=list(RISK_COLOURS.values())),
+        legend=alt.Legend(orient="top"),
+    ),
+    opacity=alt.condition("datum.similar", alt.value(1.0), alt.value(0.25)),
+    tooltip=[
+        alt.Tooltip("date:T", format="%a %d %b %Y", title="Date"),
+        alt.Tooltip("calendar:N", title="Calendar"),
+        alt.Tooltip("weather:N", title="Weather"),
+        alt.Tooltip("class_load:N", title="Class load"),
+        alt.Tooltip("footfall:Q", title="Diners"),
+        alt.Tooltip("waste_risk:N", title="Waste risk"),
+    ],
+)
+batch_line = alt.Chart(pd.DataFrame({"y": [400]})).mark_rule(
+    strokeDash=[4, 4], color="#5f5e58").encode(y="y:Q")
+st.altair_chart((line + batch_line + points).properties(height=320),
+                use_container_width=True)
+st.caption("Each dot is one simulated day. The dashed line is the usual batch of 400 meals; "
+           "dots below it mean cooked food was left over. Hover a dot for details.")
+
+with st.expander("Show past days as a table"):
+    st.dataframe(
+        history.loc[history["similar"] if len(similar) else history.index,
+                    ["date", "day_of_week", "calendar", "weather", "class_load",
+                     "footfall", "surplus", "waste_risk"]],
+        hide_index=True, use_container_width=True,
+        column_config={"date": st.column_config.DateColumn("date", format="D MMM YYYY")},
+    )
 
 with st.expander("How is this worked out?"):
     st.markdown(
