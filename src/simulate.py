@@ -61,19 +61,23 @@ def add_conditions(df, rng):
     return df
 
 
-def add_footfall_and_risk(df, rng):
-    """Expected footfall from multipliers, add noise, then compare with the batch."""
+def add_footfall_and_risk(df, rng, day_mult=DAY_MULT, noise_sd=NOISE_SD, batch_size=BATCH_SIZE):
+    """Expected footfall from multipliers, add noise, then compare with the batch.
+
+    The keyword arguments default to the values above; src/sensitivity.py
+    changes them to test how much each assumption matters.
+    """
     df["multiplier"] = (
         df["calendar"].map(CALENDAR_MULT)
         * df["weather"].map(WEATHER_MULT)
-        * df["day_of_week"].map(DAY_MULT).fillna(1.00)
+        * df["day_of_week"].map(day_mult).fillna(1.00)
         * df["class_load"].map(CLASS_LOAD_MULT)
     ).round(3)  # A6: multipliers multiply
 
-    noise = rng.normal(1.0, NOISE_SD, len(df))  # A16
+    noise = rng.normal(1.0, noise_sd, len(df))  # A16
     df["footfall"] = (BASE_FOOTFALL * df["multiplier"] * noise).clip(lower=0).round().astype(int)
 
-    df["batch_size"] = BATCH_SIZE
+    df["batch_size"] = batch_size
     df["surplus"] = (df["batch_size"] - df["footfall"]).clip(lower=0)  # A18
     df["surplus_share"] = (df["surplus"] / df["batch_size"]).round(3)
     df["waste_risk"] = pd.cut(
@@ -85,11 +89,16 @@ def add_footfall_and_risk(df, rng):
     return df
 
 
-def main():
+def build_dataset(**overrides):
+    """All simulated days. overrides: day_mult, noise_sd, batch_size."""
     rng = np.random.default_rng(SEED)
     df = build_calendar(rng)
     df = add_conditions(df, rng)
-    df = add_footfall_and_risk(df, rng)
+    return add_footfall_and_risk(df, rng, **overrides)
+
+
+def main():
+    df = build_dataset()
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUTPUT, index=False)
