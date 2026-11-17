@@ -58,6 +58,7 @@ for _, r in plan.iterrows():
     a = advise(model, r["Date"], r["Calendar"], r["Weather"], r["Class load"])
     rows.append({
         "Day": f"{r['Day'][:3]} {r['Date']:%d %b}",
+        "short": f"{r['Day'][:3]} {r['Date'].day}",  # chart label; fits on narrow screens
         "risk": a["risk"],
         "Waste risk": RISK_ICON[a["risk"]],
         "Est. diners": a["footfall"],
@@ -78,11 +79,11 @@ high_days = advice.loc[advice["risk"] == "high", "Day"].tolist()
 if high_days:
     st.write(f"🔴 **High waste risk:** {', '.join(high_days)}. Cook in two rounds on these days.")
 
-st.dataframe(advice.drop(columns="risk"), hide_index=True, use_container_width=True,
+st.dataframe(advice.drop(columns=["risk", "short"]), hide_index=True, use_container_width=True,
              column_config={"vs usual 400": st.column_config.NumberColumn(format="%+d")})
 
 bars = alt.Chart(advice).mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4, width=28).encode(
-    x=alt.X("Day:N", sort=None, title=None, axis=alt.Axis(labelAngle=0)),
+    x=alt.X("short:N", sort=None, title=None, axis=alt.Axis(labelAngle=0, labelOverlap=False)),
     y=alt.Y("Suggested batch:Q", title="Meals", scale=alt.Scale(domainMin=0)),
     color=alt.Color("risk:N", title="Waste risk",
                     scale=alt.Scale(domain=list(RISK_COLOURS), range=list(RISK_COLOURS.values())),

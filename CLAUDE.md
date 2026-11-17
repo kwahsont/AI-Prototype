@@ -12,9 +12,18 @@ Remote: https://github.com/kwahsont/AI-Prototype (branch `main`).
 - `data/survey.xlsx` — raw student survey (do not modify)
 - `data/cafeteria_days.csv` — simulated training data
 - `src/simulate.py` — builds the CSV from survey-derived multipliers
-- `src/train.py` — trains decision tree, saves `model.pkl`, prints metrics
-- `app.py` — streamlit vendor dashboard
+- `data/vendor_log.csv` — real days logged in the dashboard (git-ignored, created on first log)
+- `src/train.py` — trains decision tree, saves `model.pkl`, compares models (5-fold CV), writes `docs/model_report.md` and plots
+- `src/advisor.py` — shared advice logic (risk, footfall, batch, energy tip, tree path) used by the app and scripts
+- `src/scenarios.py` — 5 report test cases → `docs/scenarios.md` (run `python -m src.scenarios`)
+- `src/sensitivity.py` — reruns everything with one assumption changed → `docs/sensitivity.md`
+- `src/figures.py` — system diagram for the report
+- `app.py` — streamlit entry point: banner + page menu; pages live in `views/` (advisor, week, log, model)
 - `docs/assumptions.md` — every assumption behind the simulation, in plain words
+- `docs/screenshots/` — dashboard screenshots for the report
+
+Run scripts that import `src.*` with `python -m src.<name>` from the project root.
+After changing anything in `src/`, restart `streamlit run app.py`: streamlit keeps imported modules in memory.
 
 ## Model
 - Inputs: `day_of_week`, `calendar` (normal/exam/holiday/break), `weather` (clear/rainy/hazy), `class_load` (light/normal/heavy)
