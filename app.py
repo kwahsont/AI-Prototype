@@ -20,6 +20,7 @@ st.info(
 page = st.navigation([
     st.Page("views/advisor.py", title="Advisor", icon="🍱", default=True),
     st.Page("views/week.py", title="Week planner", icon="📅"),
+    st.Page("views/log.py", title="Log a day", icon="📝"),
 ])
 page.run()
 

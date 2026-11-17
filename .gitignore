@@ -9,3 +9,4 @@ venv/
 
 # local tool config
 .claude/
+data/vendor_log.csv

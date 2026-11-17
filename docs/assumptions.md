@@ -117,3 +117,8 @@ The survey asked what students do when a break between classes is under an hour.
 | After 2:00 pm | 14 | 25% |
 
 - **A21:** about **60%** of lunch diners arrive by 1 pm, and about **40%** come after. The energy tip suggests cooking in two rounds: about 60% of the batch before noon, and the remaining 40% at around 1:15 pm. Food is then not kept hot for hours, and the second round can be skipped if the first is not selling. On high-risk days, the tip says to cook the second round only if the first round sells out.
+
+## Logged (real) days
+
+- **A22:** when the vendor logs a real day on the "Log a day" page, its waste risk comes from leftovers ÷ meals cooked, using the same thresholds as A18 (under 10% low, 10% to under 25% medium, 25% or more high). This means logged and simulated days are labelled the same way.
+- **A23:** a logged day counts the same as one simulated day when retraining. With 250 simulated days, real days only start to change the advice after a few weeks of logging. Once there is about a semester of real days, drop the simulated days.
