@@ -82,7 +82,7 @@ The survey asked what students do when a break between classes is under an hour.
 ## Simulated calendar and weather
 
 - **A12:** the simulation covers 250 consecutive days starting Monday 5 January 2026. It follows a repeating 19-week cycle: 14 teaching weeks, then 2 exam weeks, then 3 break weeks.
-- **A13:** 8 random teaching weekdays are public holidays.
+- **A13:** 15 random teaching weekdays are public holidays. A real 250-day stretch in Perak has about 12 holiday days, counting national and state holidays and the two-day festivals (Chinese New Year, Hari Raya). We round up to 15 on purpose. With only 8, the tree saw too few holidays to learn them and called a 66-diner holiday "low risk".
 - **A14:** each day's weather is drawn independently: clear 55%, rainy 35%, hazy 10%. This is a rough guess for Perak; haze is really seasonal, but we keep it simple.
 
 ## Footfall, batch size and waste risk

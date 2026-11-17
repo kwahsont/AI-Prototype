@@ -36,6 +36,9 @@ CLASSES = ["low", "medium", "high"]
 SEED = 42
 TEST_SHARE = 0.2
 MAX_DEPTH = 4
+# Each leaf must hold at least 5 training days. Without this, some leaves were
+# built from 1 day and showed "100% confidence" for a single random day.
+MIN_SAMPLES_LEAF = 5
 
 
 def main():
@@ -54,7 +57,8 @@ def main():
         ("encode", ColumnTransformer([
             ("onehot", OneHotEncoder(handle_unknown="ignore"), FEATURES)
         ])),
-        ("tree", DecisionTreeClassifier(max_depth=MAX_DEPTH, random_state=SEED)),
+        ("tree", DecisionTreeClassifier(max_depth=MAX_DEPTH, min_samples_leaf=MIN_SAMPLES_LEAF,
+                                        random_state=SEED)),
     ])
     model.fit(X_train, y_train)
 
