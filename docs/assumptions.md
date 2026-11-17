@@ -64,8 +64,36 @@ Normal day (Mon–Thu, normal calendar, clear weather) = **1.00**.
 - **Stated intentions are not observed footfall.** People often say they'd change behaviour more than they really do.
 - **A different baseline gives lower numbers.** Using "days per week" as the normal-day baseline (on average 3.9 days, so a 56% chance on any day) gives multipliers about 10% lower across the board. We use A3 because it is simpler to explain.
 
-## Not covered yet
+## Holidays and semester breaks
 
-- Holiday and semester-break multipliers (`calendar` = holiday/break).
-- `class_load` (light/normal/heavy). The short-break question may help: 23 of 56 skip the meal or eat quickly elsewhere when a break is under an hour.
-- Base footfall for a normal day, waste per meal, and the risk thresholds for low, medium and high.
+The survey asked "During public holidays or semester breaks, do you stay on campus?": Never 23, Rarely 20, Sometimes 13.
+
+- **A8:** each answer means a chance of being on campus: Never = 0%, Rarely = 15%, Sometimes = 40%.
+- On average that is (0 × 23 + 0.15 × 20 + 0.40 × 13) ÷ 56 ≈ 15%. **A9:** the holiday and break multiplier is **0.15**, and the same value is used for both.
+
+## Class load
+
+The survey asked what students do when a break between classes is under an hour. 23 of 56 (41%) skip the meal or eat something quick elsewhere, so they don't eat at the cafeteria.
+
+- **A10:** compared with a normal day, a heavy day gives 25% of students a short lunch break, and a light day takes one away from 25% of students.
+- That gives: heavy = 1 − 0.25 × 0.41 ≈ **0.90**, normal = **1.00**, light = 1 + 0.25 × 0.41 ≈ **1.10**.
+- **A11:** on teaching and exam days, class load is drawn at random: light 25%, normal 50%, heavy 25%. On holiday and break days it is always light.
+
+## Simulated calendar and weather
+
+- **A12:** the simulation covers 250 consecutive days starting Monday 5 January 2026. It follows a repeating 19-week cycle: 14 teaching weeks, then 2 exam weeks, then 3 break weeks.
+- **A13:** 8 random teaching weekdays are public holidays.
+- **A14:** each day's weather is drawn independently: clear 55%, rainy 35%, hazy 10%. This is a rough guess for Perak; haze is really seasonal, but we keep it simple.
+
+## Footfall, batch size and waste risk
+
+- **A15:** a normal day serves **400** lunch diners at Village 2 cafeteria. This is a placeholder, not a measured number.
+- **A16:** noise. Real footfall = expected footfall × a random factor centred on 1 with a standard deviation of **0.10**, i.e. about ±10% on a typical day.
+- **A17:** the vendor cooks a fixed batch of **400** meals every day, sized for a normal day.
+- **A18:** surplus = batch − footfall (0 if more people come than there are meals). Waste risk depends on surplus as a share of the batch:
+
+| Surplus share | waste_risk |
+|---|---|
+| under 10% | low |
+| 10% to under 25% | medium |
+| 25% or more | high |
