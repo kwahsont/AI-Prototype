@@ -97,3 +97,23 @@ The survey asked what students do when a break between classes is under an hour.
 | under 10% | low |
 | 10% to under 25% | medium |
 | 25% or more | high |
+
+## Dashboard advice
+
+### Estimated footfall
+- **A19:** the dashboard estimates footfall as 400 (A15) × the combined multiplier (A6), with no noise. The decision tree predicts the risk tier; this formula gives the number of diners. They can occasionally disagree near a threshold, and that's expected.
+
+### Batch advice
+- **A20:** suggested batch = estimated footfall + a **10%** safety buffer, rounded up to the nearest 10 meals. The buffer is so the vendor rarely runs out. The dashboard compares this with the usual fixed batch of 400 (A17).
+
+### Lunch timing (from the survey)
+"What time do you usually eat lunch there?" (n = 56):
+
+| Time | Count | Share |
+|---|---|---|
+| Before 12:00 pm | 3 | 5% |
+| 12:00 to 1:00 pm | 31 | 55% |
+| 1:00 to 2:00 pm | 8 | 14% |
+| After 2:00 pm | 14 | 25% |
+
+- **A21:** about **60%** of lunch diners arrive by 1 pm, and about **40%** come after. The energy tip suggests cooking in two rounds: about 60% of the batch before noon, and the remaining 40% at around 1:15 pm. Food is then not kept hot for hours, and the second round can be skipped if the first is not selling. On high-risk days, the tip says to cook the second round only if the first round sells out.
