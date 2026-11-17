@@ -1,0 +1,71 @@
+# Assumptions behind the simulation
+
+Prototype only. Every number below is either taken from the student survey or is an assumption we chose. Each one has an ID (A1, A2, …) so code comments can point back to it.
+
+## Source
+
+- `data/survey.xlsx`: 56 anonymous responses, collected in November 2026.
+- The questions ask about each student's *preferred* cafeteria, not Village 2 specifically. Only 9 of the 56 live in Village 2. **A1:** we assume Village 2 diners react to these conditions the same way as the whole sample.
+
+## Step 1: likelihood answers as scores
+
+Each question asked "how likely are you to eat at your preferred cafeteria" under one condition. **A2:** answers are scored 1–5:
+
+| Answer | Score |
+|---|---|
+| Very unlikely | 1 |
+| Somewhat unlikely | 2 |
+| Neither likely nor unlikely | 3 |
+| Somewhat likely | 4 |
+| Very likely | 5 |
+
+The exam-week question shows the score in its label (e.g. "Somewhat likely (4)"); the others don't. Both forms get the same score.
+
+## Step 2: mean scores (n = 56, no missing answers)
+
+| Condition | Mean | 95% range of the mean* | % likely (4–5) | % unlikely (1–2) |
+|---|---|---|---|---|
+| Exam week | 3.36 | 3.05 – 3.68 | 55% | 27% |
+| Friday | 3.12 | 2.88 – 3.38 | 38% | 29% |
+| Weekend | 2.88 | 2.57 – 3.20 | 30% | 39% |
+| Heavy rain | 2.29 | 2.00 – 2.55 | 18% | 68% |
+| Hazy day | 2.91 | 2.68 – 3.14 | 21% | 34% |
+
+\* Bootstrap, 5,000 resamples. This shows how much the mean could move with a different 56 students.
+
+## Step 3: from scores to footfall multipliers
+
+A multiplier says how busy the cafeteria is compared with a normal day (normal = 1.00). For example, 0.70 means 70% of normal footfall.
+
+- **A3: a score of 3 means "same as a normal day".** The survey has no direct "normal day" question, so "neither likely nor unlikely" is our baseline.
+- **A4: each score maps to a chance of coming.** 1 = 10%, 2 = 30%, 3 = 50%, 4 = 70%, 5 = 90%.
+- Together these give: **multiplier = (chance under the condition) ÷ 50% = 1 + 0.4 × (mean − 3).**
+- **A5:** we round to the nearest 0.05, because the survey can't support more precision.
+
+| Condition | Mean | Raw multiplier | Proposed (A5) | Range from 95% band | Clearly different from normal? |
+|---|---|---|---|---|---|
+| Exam week | 3.36 | 1.14 | **1.15** | 1.02 – 1.27 | Yes, higher |
+| Friday | 3.12 | 1.05 | **1.05** | 0.95 – 1.15 | No |
+| Weekend | 2.88 | 0.95 | **0.95** | 0.83 – 1.08 | No |
+| Heavy rain | 2.29 | 0.71 | **0.70** | 0.60 – 0.82 | Yes, lower |
+| Hazy day | 2.91 | 0.96 | **0.95** | 0.87 – 1.06 | No |
+
+Normal day (Mon–Thu, normal calendar, clear weather) = **1.00**.
+
+## Step 4: combining conditions
+
+- **A6:** multipliers multiply. For example, an exam-week Friday in heavy rain = 1.15 × 1.05 × 0.70 ≈ 0.85.
+- **A7:** day of week only affects Friday, Saturday and Sunday. Monday to Thursday are 1.00; Saturday and Sunday both use the weekend value.
+
+## Weak spots to mention in the report
+
+- **Weekend is probably too high.** 0.95 rests on A3. Many students who answered "neither" about weekends likely still come less than on a weekday. Also, 43 of 56 never or rarely stay on campus during breaks, which points the same way. Consider a lower, stated value (e.g. 0.70) as a separate assumption instead of the survey-derived one.
+- **Friday, weekend and haze are within noise.** Their ranges include 1.00, so the survey can't tell them apart from a normal day.
+- **Stated intentions are not observed footfall.** People often say they'd change behaviour more than they really do.
+- **A different baseline gives lower numbers.** Using "days per week" as the normal-day baseline (on average 3.9 days, so a 56% chance on any day) gives multipliers about 10% lower across the board. We use A3 because it is simpler to explain.
+
+## Not covered yet
+
+- Holiday and semester-break multipliers (`calendar` = holiday/break).
+- `class_load` (light/normal/heavy). The short-break question may help: 23 of 56 skip the meal or eat quickly elsewhere when a break is under an hour.
+- Base footfall for a normal day, waste per meal, and the risk thresholds for low, medium and high.
