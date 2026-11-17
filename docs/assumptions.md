@@ -104,7 +104,7 @@ The survey asked what students do when a break between classes is under an hour.
 - **A19:** the dashboard estimates footfall as 400 (A15) × the combined multiplier (A6), with no noise. The decision tree predicts the risk tier; this formula gives the number of diners. They can occasionally disagree near a threshold, and that's expected.
 
 ### Batch advice
-- **A20:** suggested batch = estimated footfall + a **10%** safety buffer, rounded up to the nearest 10 meals. The buffer is so the vendor rarely runs out. The dashboard compares this with the usual fixed batch of 400 (A17).
+- **A20:** suggested batch = estimated footfall + a **10%** safety buffer, rounded up to the nearest 10 meals. The buffer is so the vendor rarely runs out. The suggestion is never above the usual batch of 400 (A17) unless more than 400 diners are expected (e.g. exam weeks). This keeps the advice from adding waste on ordinary days.
 
 ### Lunch timing (from the survey)
 "What time do you usually eat lunch there?" (n = 56):
