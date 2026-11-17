@@ -91,6 +91,6 @@ bars = alt.Chart(advice).mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4,
     tooltip=["Day", "Waste risk", "Est. diners", "Suggested batch"],
 )
 usual_line = alt.Chart(pd.DataFrame({"y": [400]})).mark_rule(
-    strokeDash=[4, 4], color="#5f5e58").encode(y="y:Q")
+    strokeDash=[4, 4], color="#ffd23f").encode(y="y:Q")
 st.altair_chart((bars + usual_line).properties(height=260), use_container_width=True)
-st.caption("Bars are the suggested batch for each day; the dashed line is the usual 400.")
+st.caption("Bars are the suggested batch for each day; the dashed gold line is the usual 400.")

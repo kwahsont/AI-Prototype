@@ -1,0 +1,14 @@
+# Dark space-opera theme for the dashboard.
+[theme]
+base = "dark"
+primaryColor = "#ffd23f"              # saber gold: buttons, focus rings, selected items
+backgroundColor = "#05070d"           # deep space
+secondaryBackgroundColor = "#101726"  # input fields, tables, expanders
+textColor = "#e8eaf0"
+linkColor = "#7cc4ff"
+font = "Exo:https://fonts.googleapis.com/css2?family=Exo:wght@400;600;700&display=swap"
+headingFont = "Orbitron:https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap"
+
+[theme.sidebar]
+backgroundColor = "#0a0f1c"
+secondaryBackgroundColor = "#141c2e"

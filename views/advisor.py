@@ -100,8 +100,8 @@ base = alt.Chart(history).encode(
     x=alt.X("date:T", title=None, axis=alt.Axis(format="%b", grid=False)),
     y=alt.Y("footfall:Q", title="Lunch diners", scale=alt.Scale(domainMin=0)),
 )
-line = base.mark_line(strokeWidth=1.5, color="#b4b2a9")
-points = base.mark_circle(size=60, stroke="#ffffff", strokeWidth=1).encode(
+line = base.mark_line(strokeWidth=1.5, color="#5c6b8a")
+points = base.mark_circle(size=60, stroke="#05070d", strokeWidth=1).encode(
     color=alt.Color(
         "waste_risk:N", title="Waste risk",
         scale=alt.Scale(domain=list(RISK_COLOURS), range=list(RISK_COLOURS.values())),
@@ -118,10 +118,10 @@ points = base.mark_circle(size=60, stroke="#ffffff", strokeWidth=1).encode(
     ],
 )
 batch_line = alt.Chart(pd.DataFrame({"y": [400]})).mark_rule(
-    strokeDash=[4, 4], color="#5f5e58").encode(y="y:Q")
+    strokeDash=[4, 4], color="#ffd23f").encode(y="y:Q")
 st.altair_chart((line + batch_line + points).properties(height=320),
                 use_container_width=True)
-st.caption("Each dot is one simulated day. The dashed line is the usual batch of 400 meals; "
+st.caption("Each dot is one simulated day. The dashed gold line is the usual batch of 400 meals; "
            "dots below it mean cooked food was left over. Hover a dot for details.")
 
 with st.expander("Show past days as a table"):
