@@ -1,0 +1,49 @@
+{
+  "n_simulated": 250,
+  "n_logged": 0,
+  "n_train": 200,
+  "n_test": 50,
+  "test_accuracy": 0.82,
+  "confusion_matrix": [
+    [
+      20,
+      0,
+      0
+    ],
+    [
+      5,
+      0,
+      3
+    ],
+    [
+      0,
+      1,
+      21
+    ]
+  ],
+  "recall": {
+    "low": 1.0,
+    "medium": 0.0,
+    "high": 0.9545454545454546
+  },
+  "importance": {
+    "calendar": 0.46698306149081886,
+    "weather": 0.4596042897298702,
+    "class_load": 0.07341264877931088,
+    "day_of_week": 0.0
+  },
+  "comparison": {
+    "Baseline (always most common class)": {
+      "mean": 0.43600000000000005,
+      "sd": 0.008000000000000007
+    },
+    "Logistic regression": {
+      "mean": 0.796,
+      "sd": 0.03440930106817049
+    },
+    "Decision tree (depth 4) \u2014 used": {
+      "mean": 0.8160000000000001,
+      "sd": 0.023323807579381173
+    }
+  }
+}
